@@ -1,0 +1,42 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-50 flex items-center justify-center px-4">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-lg">
+    <h1 class="text-3xl font-extrabold text-center mb-6 text-blue-600 tracking-wide">
+      TODO List
+    </h1>
+
+    <!-- Form สำหรับเพิ่ม Task -->
+    <%= form_with(model: @new_task, local: true, class: "flex items-center gap-2 mb-6") do |f| %>
+      <%= f.text_field :name, placeholder: "Enter a task", class: "flex-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300" %>
+      <%= f.submit "Add", class: "px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition" %>
+    <% end %>
+
+    <!-- Incomplete Tasks -->
+    <h2 class="text-xl font-semibold mb-3 text-gray-800">Incomplete Tasks</h2>
+    <% if @tasks.where(status: "incomplete").exists? %>
+      <ul class="space-y-3">
+        <% @tasks.where(status: "incomplete").each do |task| %>
+          <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+            <span class="text-gray-700 font-medium"><%= task.name %></span>
+            <%= link_to "Complete", complete_task_path(task), method: :patch, class: "text-blue-500 font-medium hover:underline" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-center italic">No incomplete tasks</p>
+    <% end %>
+
+    <!-- Complete Tasks -->
+    <h2 class="text-xl font-semibold mt-8 mb-3 text-gray-800">Complete Tasks</h2>
+    <% if @tasks.where(status: "complete").exists? %>
+      <ul class="space-y-3">
+        <% @tasks.where(status: "complete").each do |task| %>
+          <li class="flex justify-between items-center bg-green-100 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+            <span class="text-green-700 font-medium"><%= task.name %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-center italic">No completed tasks</p>
+    <% end %>
+  </div>
+</div>
